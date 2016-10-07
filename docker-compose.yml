@@ -1,0 +1,18 @@
+version: '2'
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: docker/postgress/Dockerfile
+    env_file: .pg.env
+  ruby:
+    build:
+      context: .
+      dockerfile: docker/ruby/Dockerfile
+    links:
+      - postgres
+    command: bash -c "bundle install && bundle exec hanami server --host=0.0.0.0"
+    volumes:
+       - ./test_ruby/:/home/hanami-user/project
+       - /usr/local/bundle
+
